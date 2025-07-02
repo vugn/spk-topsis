@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\AlternativeController;
+use App\Http\Controllers\CriterionController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\TopsisController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -8,9 +13,20 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Resource routes
+    Route::resource('alternatives', AlternativeController::class);
+    Route::resource('criteria', CriterionController::class);
+    Route::resource('evaluations', EvaluationController::class);
+
+    // Bulk evaluation store
+    Route::post('evaluations/bulk', [EvaluationController::class, 'bulkStore'])->name('evaluations.bulk');
+
+    // TOPSIS routes
+    Route::get('topsis', [TopsisController::class, 'index'])->name('topsis.index');
+    Route::post('topsis/calculate', [TopsisController::class, 'calculate'])->name('topsis.calculate');
+    Route::get('topsis/charts', [TopsisController::class, 'charts'])->name('topsis.charts');
 });
 
 require __DIR__.'/settings.php';

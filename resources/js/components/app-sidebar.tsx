@@ -4,7 +4,16 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import {
+    BookOpen,
+    Folder,
+    LayoutGrid,
+    Target,
+    Scale,
+    BarChart3,
+    Calculator,
+    TrendingUp
+} from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -12,6 +21,31 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: '/dashboard',
         icon: LayoutGrid,
+    },
+    {
+        title: 'Alternatif',
+        href: '/alternatives',
+        icon: Target,
+    },
+    {
+        title: 'Kriteria',
+        href: '/criteria',
+        icon: Scale,
+    },
+    {
+        title: 'Evaluasi',
+        href: '/evaluations',
+        icon: BarChart3,
+    },
+    {
+        title: 'Hasil TOPSIS',
+        href: '/topsis',
+        icon: Calculator,
+    },
+    {
+        title: 'Grafik',
+        href: '/topsis/charts',
+        icon: TrendingUp,
     },
 ];
 
@@ -37,6 +71,10 @@ export function AppSidebar() {
                         <SidebarMenuButton size="lg" asChild>
                             <Link href="/dashboard" prefetch>
                                 <AppLogo />
+                                <div className="grid flex-1 text-left text-sm leading-tight">
+                                    <span className="truncate font-semibold">SPK TOPSIS</span>
+                                    <span className="truncate text-xs">Sistem Penunjang Keputusan</span>
+                                </div>
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
