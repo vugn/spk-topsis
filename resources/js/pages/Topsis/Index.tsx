@@ -55,16 +55,16 @@ export default function Index({ results }: Props) {
         <AppLayout>
             <Head title="Hasil TOPSIS" />
 
-            <div className="space-y-6">
+            <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-6 mt-10">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Hasil TOPSIS</h1>
-                        <p className="text-gray-600 dark:text-gray-400 mt-2">
+                        <h1 className="text-3xl font-bold text-neutral-900 dark:text-white">Hasil TOPSIS</h1>
+                        <p className="text-neutral-600 dark:text-neutral-400 mt-2">
                             Hasil perhitungan sistem penunjang keputusan dengan metode TOPSIS
                         </p>
                     </div>
-                    <div className="flex space-x-3">
+                    <div className="flex gap-3">
                         <Link href="/topsis/charts">
                             <Button variant="outline">
                                 <BarChart3 className="w-4 h-4 mr-2" />
@@ -81,39 +81,39 @@ export default function Index({ results }: Props) {
                 {results.length > 0 ? (
                     <>
                         {/* Top 3 Results */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {results.slice(0, 3).map((result) => (
                                 <Card key={result.id} className={`${
                                     result.rank === 1 ? 'border-yellow-200 bg-yellow-50 dark:bg-yellow-900/10' :
                                     result.rank === 2 ? 'border-gray-200 bg-gray-50 dark:bg-gray-800/50' :
                                     'border-orange-200 bg-orange-50 dark:bg-orange-900/10'
-                                }`}>
-                                    <CardHeader className="text-center">
+                                } shadow-sm` }>
+                                    <CardHeader className="text-center pt-8 pb-2">
                                         <div className="flex justify-center mb-2">
                                             {getRankIcon(result.rank)}
                                         </div>
-                                        <CardTitle className="text-xl">
+                                        <CardTitle className="text-2xl font-bold text-neutral-900 dark:text-white">
                                             {result.alternative.name}
                                         </CardTitle>
-                                        <CardDescription>
+                                        <CardDescription className="text-neutral-500 dark:text-neutral-400 mt-1">
                                             Peringkat #{result.rank}
                                         </CardDescription>
                                     </CardHeader>
-                                    <CardContent className="text-center">
+                                    <CardContent className="text-center pb-8">
                                         <div className="space-y-2">
                                             <div>
-                                                <p className="text-sm text-gray-600 dark:text-gray-400">Skor Preferensi</p>
-                                                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                                <p className="text-sm text-neutral-600 dark:text-neutral-400">Skor Preferensi</p>
+                                                <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                                                     {Number(result.preference_score).toFixed(4)}
                                                 </p>
                                             </div>
                                             <div className="grid grid-cols-2 gap-2 text-sm">
                                                 <div>
-                                                    <p className="text-gray-600 dark:text-gray-400">D+</p>
+                                                    <p className="text-neutral-600 dark:text-neutral-400">D+</p>
                                                     <p className="font-medium">{Number(result.distance_positive).toFixed(4)}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-gray-600 dark:text-gray-400">D-</p>
+                                                    <p className="text-neutral-600 dark:text-neutral-400">D-</p>
                                                     <p className="font-medium">{Number(result.distance_negative).toFixed(4)}</p>
                                                 </div>
                                             </div>
@@ -124,17 +124,17 @@ export default function Index({ results }: Props) {
                         </div>
 
                         {/* All Results Table */}
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center">
+                        <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm mt-8">
+                            <CardHeader className="px-6 pt-6 pb-2">
+                                <CardTitle className="flex items-center text-xl font-bold text-neutral-900 dark:text-white">
                                     <TrendingUp className="w-5 h-5 mr-2" />
                                     Semua Hasil Perhitungan
                                 </CardTitle>
-                                <CardDescription>
+                                <CardDescription className="text-neutral-500 dark:text-neutral-400 mt-1">
                                     Daftar lengkap hasil perhitungan TOPSIS untuk semua alternatif
                                 </CardDescription>
                             </CardHeader>
-                            <CardContent>
+                            <CardContent className="px-6 pb-6">
                                 <div className="overflow-x-auto">
                                     <table className="w-full">
                                         <thead>
@@ -148,9 +148,9 @@ export default function Index({ results }: Props) {
                                         </thead>
                                         <tbody>
                                             {results.map((result) => (
-                                                <tr key={result.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
+                                                <tr key={result.id} className="border-b hover:bg-neutral-50 dark:hover:bg-neutral-800">
                                                     <td className="py-3 px-4">
-                                                        <div className="flex items-center space-x-2">
+                                                        <div className="flex items-center gap-2">
                                                             {getRankIcon(result.rank)}
                                                             <Badge variant={getRankBadgeVariant(result.rank)}>
                                                                 #{result.rank}
@@ -159,11 +159,11 @@ export default function Index({ results }: Props) {
                                                     </td>
                                                     <td className="py-3 px-4">
                                                         <div>
-                                                            <p className="font-medium text-gray-900 dark:text-white">
+                                                            <p className="font-medium text-neutral-900 dark:text-white">
                                                                 {result.alternative.name}
                                                             </p>
                                                             {result.alternative.description && (
-                                                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                                                <p className="text-sm text-neutral-500 dark:text-neutral-400">
                                                                     {result.alternative.description}
                                                                 </p>
                                                             )}
@@ -193,13 +193,13 @@ export default function Index({ results }: Props) {
                         </Card>
                     </>
                 ) : (
-                    <Card>
+                    <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm">
                         <CardContent className="flex flex-col items-center justify-center py-16">
-                            <Calculator className="w-16 h-16 text-gray-400 mb-4" />
-                            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                            <Calculator className="w-16 h-16 text-neutral-400 mb-4" />
+                            <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
                                 Belum ada hasil perhitungan
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 text-center mb-6">
+                            <p className="text-neutral-600 dark:text-neutral-400 text-center mb-6">
                                 Mulai dengan menghitung hasil TOPSIS berdasarkan data alternatif, kriteria, dan evaluasi yang telah diinput.
                             </p>
                             <Button onClick={handleCalculate} className="bg-blue-600 hover:bg-blue-700">

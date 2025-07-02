@@ -104,22 +104,16 @@ export default function Index({ alternatives, criteria }: Props) {
         <AppLayout>
             <Head title="Evaluasi" />
 
-            <div className="space-y-6">
+            <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-6 mt-10">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Evaluasi</h1>
-                        <p className="text-gray-600 dark:text-gray-400 mt-2">
+                        <h1 className="text-3xl font-bold text-neutral-900 dark:text-white">Evaluasi</h1>
+                        <p className="text-neutral-600 dark:text-neutral-400 mt-2">
                             Masukkan nilai evaluasi untuk setiap alternatif terhadap kriteria
                         </p>
                     </div>
-                    <div className="flex space-x-3">
-                        <Link href="/evaluations/create">
-                            <Button variant="outline">
-                                <Plus className="w-4 h-4 mr-2" />
-                                Tambah Evaluasi
-                            </Button>
-                        </Link>
+                    <div className="flex gap-3">
                         <Button
                             onClick={handleSaveAll}
                             disabled={processing}
@@ -132,51 +126,45 @@ export default function Index({ alternatives, criteria }: Props) {
                 </div>
 
                 {/* Progress Overview */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <Card>
-                        <CardContent className="p-4">
-                            <div className="flex items-center space-x-2">
-                                <Target className="w-5 h-5 text-blue-600" />
-                                <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Alternatif</p>
-                                    <p className="text-xl font-bold">{alternatives.length}</p>
-                                </div>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm">
+                        <CardContent className="p-6 flex items-center gap-4">
+                            <Target className="w-8 h-8 text-blue-600" />
+                            <div>
+                                <p className="text-sm text-neutral-600 dark:text-neutral-400">Alternatif</p>
+                                <p className="text-2xl font-bold text-neutral-900 dark:text-white">{alternatives.length}</p>
                             </div>
                         </CardContent>
                     </Card>
-                    <Card>
-                        <CardContent className="p-4">
-                            <div className="flex items-center space-x-2">
-                                <Scale className="w-5 h-5 text-green-600" />
-                                <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Kriteria</p>
-                                    <p className="text-xl font-bold">{criteria.length}</p>
-                                </div>
+                    <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm">
+                        <CardContent className="p-6 flex items-center gap-4">
+                            <Scale className="w-8 h-8 text-green-600" />
+                            <div>
+                                <p className="text-sm text-neutral-600 dark:text-neutral-400">Kriteria</p>
+                                <p className="text-2xl font-bold text-neutral-900 dark:text-white">{criteria.length}</p>
                             </div>
                         </CardContent>
                     </Card>
-                    <Card>
-                        <CardContent className="p-4">
-                            <div className="flex items-center space-x-2">
-                                <BarChart3 className="w-5 h-5 text-purple-600" />
-                                <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Evaluasi</p>
-                                    <p className="text-xl font-bold">{getTotalEvaluations()}</p>
-                                </div>
+                    <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm">
+                        <CardContent className="p-6 flex items-center gap-4">
+                            <BarChart3 className="w-8 h-8 text-purple-600" />
+                            <div>
+                                <p className="text-sm text-neutral-600 dark:text-neutral-400">Evaluasi</p>
+                                <p className="text-2xl font-bold text-neutral-900 dark:text-white">{getTotalEvaluations()}</p>
                             </div>
                         </CardContent>
                     </Card>
-                    <Card>
-                        <CardContent className="p-4">
-                            <div className="flex items-center space-x-2">
-                                <div className={`w-5 h-5 rounded-full ${
-                                    getCompletionPercentage() === 100 ? 'bg-green-500' :
-                                    getCompletionPercentage() >= 50 ? 'bg-yellow-500' : 'bg-red-500'
-                                }`} />
-                                <div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Kelengkapan</p>
-                                    <p className="text-xl font-bold">{getCompletionPercentage()}%</p>
-                                </div>
+                    <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm">
+                        <CardContent className="p-6 flex items-center gap-4">
+                            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-base ${
+                                getCompletionPercentage() === 100 ? 'bg-green-500' :
+                                getCompletionPercentage() >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                            }`}>
+                                {getCompletionPercentage()}%
+                            </div>
+                            <div>
+                                <p className="text-sm text-neutral-600 dark:text-neutral-400">Kelengkapan</p>
+                                <p className="text-2xl font-bold text-neutral-900 dark:text-white">{getCompletionPercentage()}%</p>
                             </div>
                         </CardContent>
                     </Card>
@@ -184,64 +172,43 @@ export default function Index({ alternatives, criteria }: Props) {
 
                 {/* Evaluation Matrix */}
                 {alternatives.length > 0 && criteria.length > 0 ? (
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Matriks Evaluasi</CardTitle>
-                            <CardDescription>
+                    <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm">
+                        <CardHeader className="px-6 pt-6 pb-2">
+                            <CardTitle className="text-xl font-bold text-neutral-900 dark:text-white">Matriks Evaluasi</CardTitle>
+                            <CardDescription className="text-neutral-500 dark:text-neutral-400 mt-1">
                                 Masukkan nilai evaluasi untuk setiap kombinasi alternatif dan kriteria
                             </CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="px-6 pb-6">
                             <div className="overflow-x-auto">
                                 <table className="w-full border-collapse">
                                     <thead>
                                         <tr>
-                                            <th className="border border-gray-300 p-3 bg-gray-50 dark:bg-gray-800 text-left min-w-[200px]">
-                                                Alternatif / Kriteria
-                                            </th>
-                                            {criteria.map(criterion => (
-                                                <th key={criterion.id} className="border border-gray-300 p-3 bg-gray-50 dark:bg-gray-800 text-center min-w-[150px]">
-                                                    <div className="space-y-1">
-                                                        <div className="font-medium">{criterion.name}</div>
-                                                        <div className="flex items-center justify-center space-x-1">
-                                                            <Badge variant={criterion.type === 'benefit' ? 'default' : 'secondary'} className="text-xs">
-                                                                {criterion.type === 'benefit' ? 'Benefit' : 'Cost'}
-                                                            </Badge>
-                                                            <span className="text-xs text-gray-500">
-                                                                W: {criterion.weight}
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                            <th className="border border-neutral-200 dark:border-neutral-800 p-3 bg-neutral-50 dark:bg-neutral-800 text-left min-w-[200px]">Alternatif / Kriteria</th>
+                                            {criteria.map((criterion) => (
+                                                <th key={criterion.id} className="border border-neutral-200 dark:border-neutral-800 p-3 bg-neutral-50 dark:bg-neutral-800 text-center min-w-[120px]">
+                                                    {criterion.name}
                                                 </th>
                                             ))}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {alternatives.map(alternative => (
+                                        {alternatives.map((alternative) => (
                                             <tr key={alternative.id}>
-                                                <td className="border border-gray-300 p-3 bg-gray-50 dark:bg-gray-800">
-                                                    <div>
-                                                        <div className="font-medium">{alternative.name}</div>
-                                                        {alternative.description && (
-                                                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                                                {alternative.description}
-                                                            </div>
-                                                        )}
-                                                    </div>
+                                                <td className="border border-neutral-200 dark:border-neutral-800 p-3 font-semibold text-neutral-900 dark:text-white bg-neutral-50 dark:bg-neutral-900">
+                                                    {alternative.name}
                                                 </td>
-                                                {criteria.map(criterion => {
+                                                {criteria.map((criterion) => {
                                                     const key = `${alternative.id}-${criterion.id}`;
-                                                    const value = evaluationMatrix[key] || '';
                                                     return (
-                                                        <td key={criterion.id} className="border border-gray-300 p-2">
+                                                        <td key={criterion.id} className="border border-neutral-200 dark:border-neutral-800 p-2 text-center align-middle">
                                                             <Input
                                                                 type="number"
-                                                                step="0.01"
                                                                 min="0"
-                                                                value={value}
+                                                                step="0.01"
+                                                                value={evaluationMatrix[key] || ''}
                                                                 onChange={(e) => handleValueChange(alternative.id, criterion.id, e.target.value)}
-                                                                placeholder="0.00"
-                                                                className="text-center"
+                                                                className="w-20 mx-auto text-center"
                                                             />
                                                         </td>
                                                     );
@@ -265,16 +232,16 @@ export default function Index({ alternatives, criteria }: Props) {
                         </CardContent>
                     </Card>
                 ) : (
-                    <Card>
+                    <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm">
                         <CardContent className="flex flex-col items-center justify-center py-16">
-                            <BarChart3 className="w-16 h-16 text-gray-400 mb-4" />
-                            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                            <BarChart3 className="w-16 h-16 text-neutral-400 mb-4" />
+                            <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
                                 Data belum lengkap
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 text-center mb-6">
+                            <p className="text-neutral-600 dark:text-neutral-400 text-center mb-6">
                                 Anda perlu menambahkan alternatif dan kriteria terlebih dahulu sebelum melakukan evaluasi.
                             </p>
-                            <div className="flex space-x-4">
+                            <div className="flex gap-4">
                                 <Link href="/alternatives">
                                     <Button variant="outline">
                                         <Target className="w-4 h-4 mr-2" />

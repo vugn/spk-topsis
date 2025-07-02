@@ -28,9 +28,9 @@ export default function Create() {
         <AppLayout>
             <Head title="Tambah Kriteria" />
 
-            <div className="space-y-6">
+            <div className="max-w-screen-xl mx-auto px-4 md:px-8 space-y-6 mt-10">
                 {/* Header */}
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center gap-4">
                     <Link href="/criteria">
                         <Button variant="outline" size="sm">
                             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -38,8 +38,8 @@ export default function Create() {
                         </Button>
                     </Link>
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Tambah Kriteria</h1>
-                        <p className="text-gray-600 dark:text-gray-400 mt-2">
+                        <h1 className="text-3xl font-bold text-neutral-900 dark:text-white">Tambah Kriteria</h1>
+                        <p className="text-neutral-600 dark:text-neutral-400 mt-2">
                             Tambahkan kriteria penilaian baru untuk sistem penunjang keputusan
                         </p>
                     </div>
@@ -47,17 +47,18 @@ export default function Create() {
 
                 {/* Form */}
                 <div className="max-w-2xl">
-                    <Card>
-                        <CardHeader>
-                            <div className="flex items-center space-x-2">
-                                <Scale className="w-5 h-5 text-green-600" />
-                                <CardTitle>Informasi Kriteria</CardTitle>
+                    <Card className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm p-0 overflow-hidden">
+                        <CardHeader className="flex flex-col items-start gap-3 px-6 pt-6 pb-2">
+                            <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 mb-2">
+                                <Scale className="w-6 h-6" />
                             </div>
-                            <CardDescription>
+                            <CardTitle className="text-xl font-bold text-neutral-900 dark:text-white">Informasi Kriteria</CardTitle>
+                            <CardDescription className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                                 Masukkan informasi detail untuk kriteria penilaian baru
                             </CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <div className="border-t border-neutral-100 dark:border-neutral-800 mt-2" />
+                        <CardContent className="px-6 py-6">
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="space-y-2">
                                     <Label htmlFor="name">Nama Kriteria *</Label>
