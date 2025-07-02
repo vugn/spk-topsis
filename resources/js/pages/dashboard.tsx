@@ -160,7 +160,7 @@ export default function Dashboard({ stats, topResults, recentAlternatives, recen
                                                         {result.alternative.name}
                                                     </p>
                                                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                                                        Skor: {result.preference_score.toFixed(4)}
+                                                        Skor: {Number(result.preference_score).toFixed(4)}
                                                     </p>
                                                 </div>
                                             </div>

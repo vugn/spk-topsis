@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import AppLayout from '@/layouts/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -49,15 +49,15 @@ export default function Charts({ results }: Props) {
     const chartData = results.map((result, index) => ({
         name: result.alternative.name,
         rank: result.rank,
-        preferenceScore: parseFloat(result.preference_score.toFixed(4)),
-        distancePositive: parseFloat(result.distance_positive.toFixed(4)),
-        distanceNegative: parseFloat(result.distance_negative.toFixed(4)),
+        preferenceScore: parseFloat(Number(result.preference_score).toFixed(4)),
+        distancePositive: parseFloat(Number(result.distance_positive).toFixed(4)),
+        distanceNegative: parseFloat(Number(result.distance_negative).toFixed(4)),
         color: COLORS[index % COLORS.length]
     }));
 
     const pieData = results.slice(0, 5).map((result, index) => ({
         name: result.alternative.name,
-        value: parseFloat(result.preference_score.toFixed(4)),
+        value: parseFloat(Number(result.preference_score).toFixed(4)),
         color: COLORS[index % COLORS.length]
     }));
 
@@ -249,7 +249,7 @@ export default function Charts({ results }: Props) {
                                     </div>
                                     <div className="text-center">
                                         <p className="text-2xl font-bold text-green-600">
-                                            {Math.max(...results.map(r => r.preference_score)).toFixed(4)}
+                                            {Math.max(...results.map(r => Number(r.preference_score))).toFixed(4)}
                                         </p>
                                         <p className="text-sm text-gray-600 dark:text-gray-400">
                                             Skor Tertinggi
@@ -257,7 +257,7 @@ export default function Charts({ results }: Props) {
                                     </div>
                                     <div className="text-center">
                                         <p className="text-2xl font-bold text-orange-600">
-                                            {Math.min(...results.map(r => r.preference_score)).toFixed(4)}
+                                            {Math.min(...results.map(r => Number(r.preference_score))).toFixed(4)}
                                         </p>
                                         <p className="text-sm text-gray-600 dark:text-gray-400">
                                             Skor Terendah
@@ -265,7 +265,7 @@ export default function Charts({ results }: Props) {
                                     </div>
                                     <div className="text-center">
                                         <p className="text-2xl font-bold text-purple-600">
-                                            {(results.reduce((sum, r) => sum + r.preference_score, 0) / results.length).toFixed(4)}
+                                            {(results.reduce((sum, r) => sum + Number(r.preference_score), 0) / results.length).toFixed(4)}
                                         </p>
                                         <p className="text-sm text-gray-600 dark:text-gray-400">
                                             Rata-rata Skor

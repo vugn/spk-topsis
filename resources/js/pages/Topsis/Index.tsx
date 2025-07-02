@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '@/layouts/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -104,17 +104,17 @@ export default function Index({ results }: Props) {
                                             <div>
                                                 <p className="text-sm text-gray-600 dark:text-gray-400">Skor Preferensi</p>
                                                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                                                    {result.preference_score.toFixed(4)}
+                                                    {Number(result.preference_score).toFixed(4)}
                                                 </p>
                                             </div>
                                             <div className="grid grid-cols-2 gap-2 text-sm">
                                                 <div>
                                                     <p className="text-gray-600 dark:text-gray-400">D+</p>
-                                                    <p className="font-medium">{result.distance_positive.toFixed(4)}</p>
+                                                    <p className="font-medium">{Number(result.distance_positive).toFixed(4)}</p>
                                                 </div>
                                                 <div>
                                                     <p className="text-gray-600 dark:text-gray-400">D-</p>
-                                                    <p className="font-medium">{result.distance_negative.toFixed(4)}</p>
+                                                    <p className="font-medium">{Number(result.distance_negative).toFixed(4)}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -171,17 +171,17 @@ export default function Index({ results }: Props) {
                                                     </td>
                                                     <td className="py-3 px-4 text-center">
                                                         <span className="font-mono text-lg font-semibold">
-                                                            {result.preference_score.toFixed(4)}
+                                                            {Number(result.preference_score).toFixed(4)}
                                                         </span>
                                                     </td>
                                                     <td className="py-3 px-4 text-center">
                                                         <span className="font-mono">
-                                                            {result.distance_positive.toFixed(6)}
+                                                            {Number(result.distance_positive).toFixed(6)}
                                                         </span>
                                                     </td>
                                                     <td className="py-3 px-4 text-center">
                                                         <span className="font-mono">
-                                                            {result.distance_negative.toFixed(6)}
+                                                            {Number(result.distance_negative).toFixed(6)}
                                                         </span>
                                                     </td>
                                                 </tr>

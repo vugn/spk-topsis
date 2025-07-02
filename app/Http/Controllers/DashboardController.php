@@ -32,7 +32,7 @@ class DashboardController extends Controller
         $recentAlternatives = Alternative::latest()->take(5)->get();
         $recentCriteria = Criterion::latest()->take(5)->get();
 
-        return Inertia::render('Dashboard', [
+        return Inertia::render('dashboard', [
             'stats' => $stats,
             'topResults' => $topResults,
             'recentAlternatives' => $recentAlternatives,
