@@ -9,7 +9,8 @@ import {
     Scale,
     BarChart3,
     Calculator,
-    TrendingUp
+    TrendingUp,
+    Upload
 } from 'lucide-react';
 
 const mainNavItems: NavItem[] = [
@@ -32,6 +33,11 @@ const mainNavItems: NavItem[] = [
         title: 'Evaluasi',
         href: '/evaluations',
         icon: BarChart3,
+    },
+    {
+        title: 'Import Data',
+        href: '/import',
+        icon: Upload,
     },
     {
         title: 'Hasil TOPSIS',
