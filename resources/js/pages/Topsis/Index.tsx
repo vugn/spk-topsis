@@ -9,8 +9,10 @@ import {
     TrendingUp,
     BarChart3,
     Award,
-    Target
+    Target,
+    Download
 } from 'lucide-react';
+import { exportTopsisResultsPDF } from '@/utils/pdfExport';
 
 interface Alternative {
     id: number;
@@ -18,24 +20,47 @@ interface Alternative {
     description?: string;
 }
 
+interface Criterion {
+    id: number;
+    name: string;
+    description?: string;
+    weight: number;
+    type: 'benefit' | 'cost';
+}
+
 interface TopsisResult {
     id: number;
     rank: number;
-    distance_positive: number;
-    distance_negative: number;
-    preference_score: number;
+    distance_positive: number | string;
+    distance_negative: number | string;
+    preference_score: number | string;
     alternative: Alternative;
 }
 
 interface Props {
     results: TopsisResult[];
+    criteria: Criterion[];
 }
 
-export default function Index({ results }: Props) {
+export default function Index({ results, criteria }: Props) {
     const handleCalculate = () => {
         if (confirm('Apakah Anda yakin ingin menghitung ulang hasil TOPSIS? Hasil sebelumnya akan diganti.')) {
             router.post('/topsis/calculate');
         }
+    };
+
+    const handleExportPDF = () => {
+        // Convert to format expected by PDF export
+        const formattedResults = results.map(result => ({
+            id: result.id,
+            alternative_id: result.alternative.id,
+            positive_distance: result.distance_positive,
+            negative_distance: result.distance_negative,
+            preference_score: result.preference_score,
+            rank: result.rank,
+            alternative: result.alternative
+        }));
+        exportTopsisResultsPDF(formattedResults, criteria);
     };
 
     const getRankBadgeVariant = (rank: number) => {
@@ -65,6 +90,16 @@ export default function Index({ results }: Props) {
                         </p>
                     </div>
                     <div className="flex gap-3">
+                        {results.length > 0 && (
+                            <Button
+                                variant="outline"
+                                onClick={handleExportPDF}
+                                className="border-red-200 text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40"
+                            >
+                                <Download className="w-4 h-4 mr-2" />
+                                Export PDF
+                            </Button>
+                        )}
                         <Link href="/topsis/charts">
                             <Button variant="outline">
                                 <BarChart3 className="w-4 h-4 mr-2" />

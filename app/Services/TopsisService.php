@@ -23,8 +23,25 @@ class TopsisService
             return [];
         }
 
+        // Validasi bobot kriteria harus berjumlah 1
+        $totalWeight = $criteria->sum('weight');
+        if (abs($totalWeight - 1.0) > 0.001) {
+            throw new \Exception("Total bobot kriteria harus sama dengan 1.0. Saat ini: " . number_format($totalWeight, 4));
+        }
+
+        // Pastikan ada evaluasi
+        $evaluationCount = Evaluation::count();
+        if ($evaluationCount === 0) {
+            throw new \Exception("Tidak ada data evaluasi. Silakan input evaluasi terlebih dahulu.");
+        }
+
         // Buat decision matrix
         $decisionMatrix = $this->createDecisionMatrix($alternatives, $criteria);
+
+        // Validasi matrix tidak kosong
+        if (empty($decisionMatrix) || empty($decisionMatrix[0])) {
+            throw new \Exception("Decision matrix kosong. Pastikan semua evaluasi telah diinput.");
+        }
 
         // Normalisasi matrix
         $normalizedMatrix = $this->normalizeMatrix($decisionMatrix, $criteria);
@@ -59,7 +76,11 @@ class TopsisService
                     ->where('criterion_id', $criterion->id)
                     ->first();
 
-                $row[] = $evaluation ? (float) $evaluation->value : 0;
+                if (!$evaluation) {
+                    throw new \Exception("Evaluasi tidak ditemukan untuk alternatif '{$alternative->name}' pada kriteria '{$criterion->name}'. Pastikan semua evaluasi telah diinput.");
+                }
+
+                $row[] = (float) $evaluation->value;
             }
             $matrix[] = $row;
         }

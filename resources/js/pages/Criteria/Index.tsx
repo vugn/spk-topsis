@@ -8,8 +8,10 @@ import {
     Scale,
     Edit,
     Trash2,
-    Eye
+    Eye,
+    Download
 } from 'lucide-react';
+import { exportCriteriaPDF } from '@/utils/pdfExport';
 
 interface Criterion {
     id: number;
@@ -32,6 +34,10 @@ export default function Index({ criteria }: Props) {
         }
     };
 
+    const handleExportPDF = () => {
+        exportCriteriaPDF(criteria);
+    };
+
     return (
         <AppLayout>
             <Head title="Kriteria" />
@@ -45,12 +51,24 @@ export default function Index({ criteria }: Props) {
                             Kelola kriteria penilaian untuk sistem penunjang keputusan
                         </p>
                     </div>
-                    <Link href="/criteria/create">
-                        <Button className="bg-green-600 hover:bg-green-700">
-                            <Plus className="w-4 h-4 mr-2" />
-                            Tambah Kriteria
-                        </Button>
-                    </Link>
+                    <div className="flex gap-3">
+                        {criteria.length > 0 && (
+                            <Button
+                                variant="outline"
+                                onClick={handleExportPDF}
+                                className="border-green-200 text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/40"
+                            >
+                                <Download className="w-4 h-4 mr-2" />
+                                Export PDF
+                            </Button>
+                        )}
+                        <Link href="/criteria/create">
+                            <Button className="bg-green-600 hover:bg-green-700">
+                                <Plus className="w-4 h-4 mr-2" />
+                                Tambah Kriteria
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Criteria Grid */}

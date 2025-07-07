@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\TopsisService;
+use App\Models\Criterion;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,9 +20,11 @@ class TopsisController extends Controller
     public function index(): Response
     {
         $results = $this->topsisService->getResults();
+        $criteria = Criterion::all();
 
         return Inertia::render('Topsis/Index', [
-            'results' => $results
+            'results' => $results,
+            'criteria' => $criteria
         ]);
     }
 
@@ -41,9 +44,11 @@ class TopsisController extends Controller
     public function charts(): Response
     {
         $results = $this->topsisService->getResults();
+        $criteria = Criterion::all();
 
         return Inertia::render('Topsis/Charts', [
-            'results' => $results
+            'results' => $results,
+            'criteria' => $criteria
         ]);
     }
 }

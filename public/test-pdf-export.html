@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Export Test</title>
+    <style>
+        .test-chart {
+            width: 400px;
+            height: 300px;
+            background: linear-gradient(45deg, #3b82f6, #10b981);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>SPK TOPSIS - PDF Export Test</h1>
+
+    <h2>Dashboard Export Test</h2>
+    <button onclick="testDashboardExport()">Test Dashboard Export</button>
+
+    <h2>Criteria Export Test</h2>
+    <button onclick="testCriteriaExport()">Test Criteria Export</button>
+
+    <h2>Chart Export Test</h2>
+    <div id="test-chart" class="test-chart">
+        Sample Chart Content
+    </div>
+    <button onclick="testChartExport()">Test Chart Export</button>
+
+    <script src="/build/assets/pdfExport-BY75W0Ff.js"></script>
+    <script>
+        // Test data
+        const testAlternatives = [
+            { id: 1, name: "Alternative 1", description: "Test description 1" },
+            { id: 2, name: "Alternative 2", description: "Test description 2" }
+        ];
+
+        const testCriteria = [
+            { id: 1, name: "Criteria 1", weight: "0.5", type: "benefit" },
+            { id: 2, name: "Criteria 2", weight: "0.5", type: "cost" }
+        ];
+
+        const testEvaluations = [
+            { id: 1, alternative_id: 1, criterion_id: 1, value: 8.5, alternative: testAlternatives[0], criterion: testCriteria[0] },
+            { id: 2, alternative_id: 1, criterion_id: 2, value: 7.0, alternative: testAlternatives[0], criterion: testCriteria[1] },
+            { id: 3, alternative_id: 2, criterion_id: 1, value: 9.0, alternative: testAlternatives[1], criterion: testCriteria[0] },
+            { id: 4, alternative_id: 2, criterion_id: 2, value: 6.5, alternative: testAlternatives[1], criterion: testCriteria[1] }
+        ];
+
+        const testResults = [
+            { id: 1, alternative_id: 1, positive_distance: 0.1, negative_distance: 0.9, preference_score: "0.9", rank: 1, alternative: testAlternatives[0] },
+            { id: 2, alternative_id: 2, positive_distance: 0.3, negative_distance: 0.7, preference_score: "0.7", rank: 2, alternative: testAlternatives[1] }
+        ];
+
+        const testResultsWithDatabaseFields = [
+            { id: 1, distance_positive: "0.1", distance_negative: "0.9", preference_score: "0.9", rank: 1, alternative: testAlternatives[0] },
+            { id: 2, distance_positive: "0.3", distance_negative: "0.7", preference_score: "0.7", rank: 2, alternative: testAlternatives[1] }
+        ];
+
+        function testDashboardExport() {
+            try {
+                if (typeof exportDashboardPDF !== 'undefined') {
+                    exportDashboardPDF(testAlternatives, testCriteria, testEvaluations, testResults);
+                    alert('Dashboard export initiated!');
+                } else {
+                    alert('Export function not available. Please check the import.');
+                }
+            } catch (error) {
+                console.error('Dashboard export test failed:', error);
+                alert('Dashboard export test failed: ' + error.message);
+            }
+        }
+
+        function testCriteriaExport() {
+            try {
+                if (typeof exportCriteriaPDF !== 'undefined') {
+                    exportCriteriaPDF(testCriteria);
+                    alert('Criteria export initiated!');
+                } else {
+                    alert('Criteria export function not available. Please check the import.');
+                }
+            } catch (error) {
+                console.error('Criteria export test failed:', error);
+                alert('Criteria export test failed: ' + error.message);
+            }
+        }
+
+        function testChartExport() {
+            try {
+                if (typeof exportChartPDF !== 'undefined') {
+                    exportChartPDF('test-chart', 'Test Chart Export');
+                    alert('Chart export initiated!');
+                } else {
+                    alert('Chart export function not available. Please check the import.');
+                }
+            } catch (error) {
+                console.error('Chart export test failed:', error);
+                alert('Chart export test failed: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

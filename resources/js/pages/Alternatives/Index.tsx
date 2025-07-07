@@ -8,7 +8,9 @@ import {
     Target,
     Edit,
     Trash2,
+    Download,
 } from 'lucide-react';
+import { exportAlternativesPDF } from '@/utils/pdfExport';
 
 interface Alternative {
     id: number;
@@ -29,6 +31,10 @@ export default function Index({ alternatives }: Props) {
         }
     };
 
+    const handleExportPDF = () => {
+        exportAlternativesPDF(alternatives);
+    };
+
     return (
         <AppLayout>
             <Head title="Alternatif" />
@@ -42,12 +48,24 @@ export default function Index({ alternatives }: Props) {
                             Kelola alternatif untuk sistem penunjang keputusan
                         </p>
                     </div>
-                    <Link href="/alternatives/create">
-                        <Button className="bg-blue-600 hover:bg-blue-700">
-                            <Plus className="w-4 h-4 mr-2" />
-                            Tambah Alternatif
-                        </Button>
-                    </Link>
+                    <div className="flex gap-3">
+                        {alternatives.length > 0 && (
+                            <Button
+                                variant="outline"
+                                onClick={handleExportPDF}
+                                className="border-green-200 text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/40"
+                            >
+                                <Download className="w-4 h-4 mr-2" />
+                                Export PDF
+                            </Button>
+                        )}
+                        <Link href="/alternatives/create">
+                            <Button className="bg-blue-600 hover:bg-blue-700">
+                                <Plus className="w-4 h-4 mr-2" />
+                                Tambah Alternatif
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Alternatives Grid */}

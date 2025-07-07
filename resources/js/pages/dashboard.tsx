@@ -8,9 +8,11 @@ import {
     Scale,
     BarChart3,
     Calculator,
-    TrendingUp
+    TrendingUp,
+    Download
 } from 'lucide-react';
 import { Link, router } from '@inertiajs/react';
+import { exportDashboardPDF } from '@/utils/pdfExport';
 
 interface Stats {
     alternatives_count: number;
@@ -38,8 +40,17 @@ interface Criterion {
 interface TopsisResult {
     id: number;
     rank: number;
-    preference_score: number;
+    preference_score: number | string;
     alternative: Alternative;
+}
+
+interface Evaluation {
+    id: number;
+    alternative_id: number;
+    criterion_id: number;
+    value: number;
+    alternative: Alternative;
+    criterion: Criterion;
 }
 
 interface Props {
@@ -47,9 +58,22 @@ interface Props {
     topResults: TopsisResult[];
     recentAlternatives: Alternative[];
     recentCriteria: Criterion[];
+    allAlternatives: Alternative[];
+    allCriteria: Criterion[];
+    allEvaluations: Evaluation[];
+    allResults: TopsisResult[];
 }
 
-export default function Dashboard({ stats, topResults, recentAlternatives, recentCriteria }: Props) {
+export default function Dashboard({
+    stats,
+    topResults,
+    recentAlternatives,
+    recentCriteria,
+    allAlternatives,
+    allCriteria,
+    allEvaluations,
+    allResults
+}: Props) {
     const statCards = [
         {
             title: 'Alternatif',
@@ -81,6 +105,21 @@ export default function Dashboard({ stats, topResults, recentAlternatives, recen
         }
     ];
 
+    const handleExportDashboard = async () => {
+        // Format results for PDF export
+        const formattedResults = allResults.map(result => ({
+            id: result.id,
+            alternative_id: result.alternative.id,
+            positive_distance: 0, // These fields might not be available in dashboard
+            negative_distance: 0,
+            preference_score: result.preference_score,
+            rank: result.rank,
+            alternative: result.alternative
+        }));
+
+        await exportDashboardPDF(allAlternatives, allCriteria, allEvaluations, formattedResults);
+    };
+
     return (
         <AppLayout>
             <Head title="Dashboard" />
@@ -99,6 +138,16 @@ export default function Dashboard({ stats, topResults, recentAlternatives, recen
                             </div>
                         </div>
                         <div className="flex gap-3">
+                            {stats.alternatives_count > 0 && stats.criteria_count > 0 && (
+                                <Button
+                                    variant="outline"
+                                    onClick={handleExportDashboard}
+                                    className="border-yellow-200 text-yellow-700 dark:text-yellow-300 bg-yellow-50 dark:bg-yellow-900/20 hover:bg-yellow-100 dark:hover:bg-yellow-900/40 px-6 py-3"
+                                >
+                                    <Download className="w-5 h-5 mr-2" />
+                                    Export Laporan PDF
+                                </Button>
+                            )}
                             <Link href="/topsis">
                                 <Button variant="outline" className="border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-800 px-6 py-3">
                                     <BarChart3 className="w-5 h-5 mr-2" />

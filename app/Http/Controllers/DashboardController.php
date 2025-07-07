@@ -32,11 +32,21 @@ class DashboardController extends Controller
         $recentAlternatives = Alternative::latest()->take(5)->get();
         $recentCriteria = Criterion::latest()->take(5)->get();
 
+        // For PDF export - get all data
+        $allAlternatives = Alternative::all();
+        $allCriteria = Criterion::all();
+        $allEvaluations = Evaluation::with(['alternative', 'criterion'])->get();
+        $allResults = $this->topsisService->getResults();
+
         return Inertia::render('dashboard', [
             'stats' => $stats,
             'topResults' => $topResults,
             'recentAlternatives' => $recentAlternatives,
             'recentCriteria' => $recentCriteria,
+            'allAlternatives' => $allAlternatives,
+            'allCriteria' => $allCriteria,
+            'allEvaluations' => $allEvaluations,
+            'allResults' => $allResults,
         ]);
     }
 }

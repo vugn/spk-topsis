@@ -5,8 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import {
     ArrowLeft,
     BarChart3,
-    TrendingUp
+    TrendingUp,
+    Download
 } from 'lucide-react';
+import { exportChartPDF } from '@/utils/pdfExport';
 import {
     BarChart,
     Bar,
@@ -32,9 +34,9 @@ interface Alternative {
 interface TopsisResult {
     id: number;
     rank: number;
-    distance_positive: number;
-    distance_negative: number;
-    preference_score: number;
+    distance_positive: number | string;
+    distance_negative: number | string;
+    preference_score: number | string;
     alternative: Alternative;
 }
 
@@ -67,19 +69,41 @@ export default function Charts({ results }: Props) {
 
             <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-8 mt-10">
                 {/* Header */}
-                <div className="flex items-center gap-4">
-                    <Link href="/topsis">
-                        <Button variant="outline" size="sm">
-                            <ArrowLeft className="w-4 h-4 mr-2" />
-                            Kembali
-                        </Button>
-                    </Link>
-                    <div>
-                        <h1 className="text-3xl font-bold text-neutral-900 dark:text-white">Grafik Hasil TOPSIS</h1>
-                        <p className="text-neutral-600 dark:text-neutral-400 mt-2">
-                            Visualisasi hasil perhitungan sistem penunjang keputusan
-                        </p>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <Link href="/topsis">
+                            <Button variant="outline" size="sm">
+                                <ArrowLeft className="w-4 h-4 mr-2" />
+                                Kembali
+                            </Button>
+                        </Link>
+                        <div>
+                            <h1 className="text-3xl font-bold text-neutral-900 dark:text-white">Grafik Hasil TOPSIS</h1>
+                            <p className="text-neutral-600 dark:text-neutral-400 mt-2">
+                                Visualisasi hasil perhitungan sistem penunjang keputusan
+                            </p>
+                        </div>
                     </div>
+                    {results.length > 0 && (
+                        <div className="flex gap-3">
+                            <Button
+                                variant="outline"
+                                onClick={() => exportChartPDF('preference-score-chart', 'Grafik Skor Preferensi TOPSIS')}
+                                className="border-blue-200 text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40"
+                            >
+                                <Download className="w-4 h-4 mr-2" />
+                                Export Bar Chart
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={() => exportChartPDF('pie-chart', 'Grafik Distribusi Ranking TOPSIS')}
+                                className="border-green-200 text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/40"
+                            >
+                                <Download className="w-4 h-4 mr-2" />
+                                Export Pie Chart
+                            </Button>
+                        </div>
+                    )}
                 </div>
 
                 {results.length > 0 ? (
@@ -96,7 +120,7 @@ export default function Charts({ results }: Props) {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <div className="h-96">
+                                <div id="preference-score-chart" className="h-96">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                                             <CartesianGrid strokeDasharray="3 3" />
@@ -166,13 +190,12 @@ export default function Charts({ results }: Props) {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Distribusi Skor Top 5 Alternatif</CardTitle>
-                                    <CardDescription>
-                                        Persentase skor preferensi 5 alternatif teratas
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="h-80">
+                                    <CardTitle>Distribusi Skor Top 5 Alternatif</CardTitle>                                <CardDescription>
+                                    Persentase skor preferensi 5 alternatif teratas
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div id="pie-chart" className="h-80">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <PieChart>
                                                 <Pie

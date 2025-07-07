@@ -6,6 +6,7 @@ use App\Models\Alternative;
 use App\Models\Criterion;
 use App\Models\Evaluation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -55,13 +56,17 @@ class EvaluationController extends Controller
 
     public function bulkStore(Request $request)
     {
+        // Debug log
+        Log::info('Bulk store request data:', $request->all());
+
         $validated = $request->validate([
-            'evaluations' => 'required|array',
-            'evaluations.*.alternative_id' => 'required|exists:alternatives,id',
-            'evaluations.*.criterion_id' => 'required|exists:criteria,id',
+            'evaluations' => 'required|array|min:1',
+            'evaluations.*.alternative_id' => 'required|integer|exists:alternatives,id',
+            'evaluations.*.criterion_id' => 'required|integer|exists:criteria,id',
             'evaluations.*.value' => 'required|numeric|min:0',
         ]);
 
+        $savedCount = 0;
         foreach ($validated['evaluations'] as $evaluation) {
             Evaluation::updateOrCreate(
                 [
@@ -70,10 +75,11 @@ class EvaluationController extends Controller
                 ],
                 ['value' => $evaluation['value']]
             );
+            $savedCount++;
         }
 
         return redirect()->route('evaluations.index')
-            ->with('success', 'Semua evaluasi berhasil disimpan.');
+            ->with('success', "Berhasil menyimpan {$savedCount} evaluasi.");
     }
 
     public function edit(Evaluation $evaluation): Response
