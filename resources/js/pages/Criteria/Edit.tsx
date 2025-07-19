@@ -21,9 +21,11 @@ interface Criterion {
 
 interface Props {
     criterion: Criterion;
+    totalWeight: number;
+    remainingWeight: number;
 }
 
-export default function Edit({ criterion }: Props) {
+export default function Edit({ criterion, totalWeight, remainingWeight }: Props) {
     const { data, setData, put, processing, errors } = useForm({
         name: criterion.name,
         description: criterion.description || '',
@@ -54,6 +56,32 @@ export default function Edit({ criterion }: Props) {
                         <p className="text-neutral-600 dark:text-neutral-400 mt-2">
                             Edit informasi kriteria: {criterion.name}
                         </p>
+                    </div>
+                </div>
+
+                {/* Weight Info */}
+                <div className="max-w-2xl">
+                    <div className="p-4 rounded-lg border bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800">
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="font-medium text-blue-900 dark:text-blue-100">
+                                Status Bobot Kriteria
+                            </h3>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                            <div>
+                                <span className="text-blue-700 dark:text-blue-300">Bobot Saat Ini: </span>
+                                <span className="font-bold">{(criterion.weight * 100).toFixed(2)}%</span>
+                            </div>
+                            <div>
+                                <span className="text-blue-700 dark:text-blue-300">Total Lainnya: </span>
+                                <span className="font-bold">{(totalWeight * 100).toFixed(2)}%</span>
+                            </div>
+                            <div>
+                                <span className="text-blue-700 dark:text-blue-300">Sisa Tersedia: </span>
+                                <span className="font-bold text-green-600">{(remainingWeight * 100).toFixed(2)}%</span>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
@@ -110,15 +138,25 @@ export default function Edit({ criterion }: Props) {
                                             type="number"
                                             step="0.0001"
                                             min="0"
-                                            max="1"
+                                            max={remainingWeight + criterion.weight}
                                             value={data.weight}
                                             onChange={(e) => setData('weight', e.target.value)}
                                             placeholder="0.0000"
                                             className={errors.weight ? 'border-red-500' : ''}
                                         />
-                                        <p className="text-xs text-gray-500">
-                                            Nilai antara 0 dan 1 (contoh: 0.25)
-                                        </p>
+                                        <div className="space-y-1">
+                                            <p className="text-xs text-gray-500">
+                                                Nilai antara 0 dan {Number((remainingWeight + criterion.weight)).toFixed(4)} (maksimal yang bisa diset)
+                                            </p>
+                                            {data.weight && (
+                                                <p className={`text-xs ${parseFloat(data.weight) > (remainingWeight + criterion.weight) ? 'text-red-500' :
+                                                    parseFloat(data.weight) > 0 ? 'text-green-600' : 'text-gray-500'
+                                                    }`}>
+                                                    Persentase: {(parseFloat(data.weight || '0') * 100).toFixed(2)}%
+                                                    {parseFloat(data.weight) > (remainingWeight + criterion.weight) && ' (Melebihi batas!)'}
+                                                </p>
+                                            )}
+                                        </div>
                                         {errors.weight && (
                                             <p className="text-sm text-red-600">{errors.weight}</p>
                                         )}

@@ -26,7 +26,8 @@ class TopsisService
         // Validasi bobot kriteria harus berjumlah 1
         $totalWeight = $criteria->sum('weight');
         if (abs($totalWeight - 1.0) > 0.001) {
-            throw new \Exception("Total bobot kriteria harus sama dengan 1.0. Saat ini: " . number_format($totalWeight, 4));
+            $percentage = number_format($totalWeight * 100, 2);
+            throw new \Exception("Total bobot kriteria harus sama dengan 100%. Saat ini total bobot adalah: {$percentage}%. Silakan periksa dan sesuaikan bobot kriteria di menu Kriteria.");
         }
 
         // Pastikan ada evaluasi

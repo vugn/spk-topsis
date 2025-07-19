@@ -11,7 +11,12 @@ import {
     Scale
 } from 'lucide-react';
 
-export default function Create() {
+interface Props {
+    totalWeight: number;
+    remainingWeight: number;
+}
+
+export default function Create({ totalWeight, remainingWeight }: Props) {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         description: '',
@@ -44,6 +49,42 @@ export default function Create() {
                         </p>
                     </div>
                 </div>
+
+                {/* Weight Info */}
+                {totalWeight > 0 && (
+                    <div className="max-w-2xl">
+                        <div className={`p-4 rounded-lg border ${remainingWeight <= 0 ? 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800' : 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800'}`}>
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className={`font-medium ${remainingWeight <= 0 ? 'text-red-900 dark:text-red-100' : 'text-blue-900 dark:text-blue-100'}`}>
+                                    Status Bobot Kriteria
+                                </h3>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                <div>
+                                    <span className={remainingWeight <= 0 ? 'text-red-700 dark:text-red-300' : 'text-blue-700 dark:text-blue-300'}>Total Saat Ini: </span>
+                                    <span className="font-bold">{(totalWeight * 100).toFixed(2)}%</span>
+                                </div>
+                                <div>
+                                    <span className={remainingWeight <= 0 ? 'text-red-700 dark:text-red-300' : 'text-blue-700 dark:text-blue-300'}>Sisa Bobot: </span>
+                                    <span className={`font-bold ${remainingWeight <= 0 ? 'text-red-600' : 'text-green-600'}`}>
+                                        {(remainingWeight * 100).toFixed(2)}%
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className={remainingWeight <= 0 ? 'text-red-700 dark:text-red-300' : 'text-blue-700 dark:text-blue-300'}>Maksimal: </span>
+                                    <span className="font-bold">{Math.max(0, remainingWeight * 100).toFixed(2)}%</span>
+                                </div>
+                            </div>
+                            {remainingWeight <= 0 && (
+                                <div className="mt-3 p-3 bg-red-100 dark:bg-red-900/40 rounded border">
+                                    <p className="text-sm text-red-800 dark:text-red-200">
+                                        <strong>Peringatan:</strong> Total bobot sudah mencapai 100%. Anda perlu mengurangi bobot kriteria yang ada terlebih dahulu.
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 {/* Form */}
                 <div className="max-w-2xl">
@@ -98,15 +139,25 @@ export default function Create() {
                                             type="number"
                                             step="0.0001"
                                             min="0"
-                                            max="1"
+                                            max={Math.max(0, remainingWeight)}
                                             value={data.weight}
                                             onChange={(e) => setData('weight', e.target.value)}
                                             placeholder="0.0000"
                                             className={errors.weight ? 'border-red-500' : ''}
                                         />
-                                        <p className="text-xs text-gray-500">
-                                            Nilai antara 0 dan 1 (contoh: 0.25)
-                                        </p>
+                                        <div className="space-y-1">
+                                            <p className="text-xs text-gray-500">
+                                                Nilai antara 0 dan {Math.max(0, remainingWeight).toFixed(4)} (maksimal yang tersisa)
+                                            </p>
+                                            {data.weight && (
+                                                <p className={`text-xs ${parseFloat(data.weight) > remainingWeight ? 'text-red-500' :
+                                                        parseFloat(data.weight) > 0 ? 'text-green-600' : 'text-gray-500'
+                                                    }`}>
+                                                    Persentase: {(parseFloat(data.weight || '0') * 100).toFixed(2)}%
+                                                    {parseFloat(data.weight) > remainingWeight && ' (Melebihi batas!)'}
+                                                </p>
+                                            )}
+                                        </div>
                                         {errors.weight && (
                                             <p className="text-sm text-red-600">{errors.weight}</p>
                                         )}

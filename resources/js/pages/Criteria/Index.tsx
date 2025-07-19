@@ -25,9 +25,11 @@ interface Criterion {
 
 interface Props {
     criteria: Criterion[];
+    totalWeight: number;
+    remainingWeight: number;
 }
 
-export default function Index({ criteria }: Props) {
+export default function Index({ criteria, totalWeight, remainingWeight }: Props) {
     const handleDelete = (id: number) => {
         if (confirm('Apakah Anda yakin ingin menghapus kriteria ini?')) {
             router.delete(`/criteria/${id}`);
@@ -63,13 +65,86 @@ export default function Index({ criteria }: Props) {
                             </Button>
                         )}
                         <Link href="/criteria/create">
-                            <Button className="bg-green-600 hover:bg-green-700">
+                            <Button
+                                className="bg-green-600 hover:bg-green-700"
+                                disabled={remainingWeight <= 0}
+                            >
                                 <Plus className="w-4 h-4 mr-2" />
                                 Tambah Kriteria
                             </Button>
                         </Link>
                     </div>
                 </div>
+
+                {/* Weight Summary */}
+                {criteria.length > 0 && (
+                    <Card className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800">
+                        <CardContent className="p-6">
+                            <div className="flex items-center justify-between">
+                                <div className="space-y-2">
+                                    <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100">
+                                        Ringkasan Bobot Kriteria
+                                    </h3>
+                                    <div className="flex items-center gap-6">
+                                        <div className="text-sm">
+                                            <span className="text-blue-700 dark:text-blue-300">Total Bobot: </span>
+                                            <span className={`font-bold ${Math.abs(totalWeight - 1.0) < 0.001 ? 'text-green-600' : totalWeight > 1.0 ? 'text-red-600' : 'text-yellow-600'}`}>
+                                                {(totalWeight * 100).toFixed(2)}%
+                                            </span>
+                                        </div>
+                                        <div className="text-sm">
+                                            <span className="text-blue-700 dark:text-blue-300">Sisa Bobot: </span>
+                                            <span className={`font-bold ${remainingWeight <= 0 ? 'text-red-600' : 'text-green-600'}`}>
+                                                {(remainingWeight * 100).toFixed(2)}%
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    {Math.abs(totalWeight - 1.0) < 0.001 ? (
+                                        <Badge className="bg-green-100 text-green-800 border-green-200">
+                                            ✓ Bobot Valid
+                                        </Badge>
+                                    ) : totalWeight > 1.0 ? (
+                                        <Badge variant="destructive">
+                                            ⚠ Bobot Berlebih
+                                        </Badge>
+                                    ) : (
+                                        <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
+                                            ⚠ Bobot Kurang
+                                        </Badge>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Progress Bar */}
+                            <div className="mt-4">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-xs text-blue-600 dark:text-blue-400">0%</span>
+                                    <span className="text-xs text-blue-600 dark:text-blue-400">100%</span>
+                                </div>
+                                <div className="w-full bg-blue-200 dark:bg-blue-800 rounded-full h-2">
+                                    <div
+                                        className={`h-2 rounded-full transition-all duration-300 ${totalWeight > 1.0 ? 'bg-red-500' :
+                                                Math.abs(totalWeight - 1.0) < 0.001 ? 'bg-green-500' :
+                                                    'bg-yellow-500'
+                                            }`}
+                                        style={{ width: `${Math.min(totalWeight * 100, 100)}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+
+                            {remainingWeight <= 0 && (
+                                <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                                    <p className="text-sm text-red-700 dark:text-red-300">
+                                        <strong>Perhatian:</strong> Total bobot sudah mencapai atau melebihi 100%.
+                                        Anda perlu mengurangi bobot kriteria yang ada sebelum menambah kriteria baru.
+                                    </p>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                )}
 
                 {/* Criteria Grid */}
                 {criteria.length > 0 ? (
