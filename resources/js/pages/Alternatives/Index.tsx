@@ -9,6 +9,8 @@ import {
     Edit,
     Trash2,
     Download,
+    FileText,
+    Eye,
 } from 'lucide-react';
 import { exportAlternativesPDF } from '@/utils/pdfExport';
 
@@ -17,6 +19,15 @@ interface Alternative {
     name: string;
     description?: string;
     evaluations_count: number;
+    evidence_files_count: number;
+    evidence_files_with_url: Array<{
+        name: string;
+        original_name: string;
+        size: number;
+        mime_type: string;
+        url: string;
+        uploaded_at: string;
+    }>;
     created_at: string;
 }
 
@@ -80,9 +91,18 @@ export default function Index({ alternatives }: Props) {
                                     <CardTitle className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
                                         {alternative.name}
                                     </CardTitle>
-                                    <Badge variant="secondary" className="text-xs px-2 py-1 mb-1">
-                                        {alternative.evaluations_count} evaluasi
-                                    </Badge>
+                                    <div className="flex gap-2 mb-1">
+                                        <Badge variant="secondary" className="text-xs px-2 py-1">
+                                            {alternative.evaluations_count} evaluasi
+                                        </Badge>
+                                        <Badge
+                                            variant={alternative.evidence_files_count > 0 ? "default" : "outline"}
+                                            className="text-xs px-2 py-1"
+                                        >
+                                            <FileText className="w-3 h-3 mr-1" />
+                                            {alternative.evidence_files_count} bukti
+                                        </Badge>
+                                    </div>
                                     {alternative.description && (
                                         <CardDescription className="whitespace-normal break-words line-clamp-2 text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                                             {alternative.description}
@@ -95,6 +115,11 @@ export default function Index({ alternatives }: Props) {
                                         Dibuat: {new Date(alternative.created_at).toLocaleDateString('id-ID')}
                                     </span>
                                     <div className="flex gap-2 mt-1">
+                                        <Link href={`/alternatives/${alternative.id}`}>
+                                            <Button variant="outline" size="sm" className="border-neutral-200 dark:border-neutral-700">
+                                                <Eye className="w-4 h-4" />
+                                            </Button>
+                                        </Link>
                                         <Link href={`/alternatives/${alternative.id}/edit`}>
                                             <Button variant="outline" size="sm" className="border-neutral-200 dark:border-neutral-700">
                                                 <Edit className="w-4 h-4" />

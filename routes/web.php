@@ -21,6 +21,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('criteria', CriterionController::class);
     Route::resource('evaluations', EvaluationController::class);
 
+    // Alternative evidence file routes
+    Route::post('alternatives/{alternative}/evidence', [AlternativeController::class, 'uploadEvidence'])->name('alternatives.evidence.upload');
+    Route::delete('alternatives/{alternative}/evidence', [AlternativeController::class, 'deleteEvidence'])->name('alternatives.evidence.delete');
+    Route::get('alternatives/{alternative}/evidence/{fileName}', [AlternativeController::class, 'downloadEvidence'])->name('alternatives.evidence.download');
+
     // Bulk evaluation store
     Route::post('evaluations/bulk', [EvaluationController::class, 'bulkStore'])->name('evaluations.bulk');
 
@@ -37,5 +42,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('import/template/{type}', [ImportController::class, 'downloadTemplate'])->name('import.template');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
